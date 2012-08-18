@@ -1,0 +1,41 @@
+/* ********************************************************************** */
+/* *******    Opening  New windows and managing them      *************** */
+/* ********************************************************************** */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <curses.h>
+#include <unistd.h>
+
+int main(void)
+{
+   WINDOW *pad_ptr;
+  int x, y, pad_lines, pad_cols;
+   char disp_char;
+   
+   initscr();
+   pad_lines = LINES + 50;
+   pad_cols = COLS + 50;
+   pad_ptr = newpad(pad_lines, pad_cols);
+   disp_char = 'a'; 
+  
+    
+   for(x = 0; x < pad_lines; x++)   
+       for(y = 0; y < pad_cols; y++) { 
+           /* move ch and put ch at given postition */
+           mvwaddch(pad_ptr, x, y, disp_char);
+           if(disp_char == 'z') disp_char = 'a';
+           else disp_char++;
+       }
+       
+   prefresh(pad_ptr, 5, 7, 2, 2, 9, 9);
+   sleep(1);
+   prefresh(pad_ptr, LINES + 5, COLS + 7, 5, 5, 21, 19);
+   sleep(1);
+     
+   delwin(pad_ptr);
+   
+   endwin();
+   
+   exit(EXIT_SUCCESS);
+}
